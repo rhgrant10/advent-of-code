@@ -6,7 +6,7 @@ import "fmt"
 import "math"
 
 
-func get_problems() map[int]int {
+func getProblems() map[int]int {
     problems := make(map[int]int)
     problems[1] = 0
     problems[12] = 3
@@ -88,7 +88,7 @@ func calculateSpiralManhattan(square int) (int, error) {
 
 
 func main() {
-    problems := get_problems()
+    problems := getProblems()
     for square, answer := range problems {
         fmt.Println("square: ", square)
 
