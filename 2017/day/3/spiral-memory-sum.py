@@ -47,5 +47,11 @@ def get_first_value_greater_than(target):
 
 
 if __name__ == '__main__':
-    target = int(sys.argv[1])
-    print(get_first_value_greater_than(target))
+    try:
+        target = int(sys.argv[1])
+    except ValueError:
+        target = 0
+    if target < 1:
+        print(f"That's not a positive integer... {sys.argv[1]}")
+    else:
+        print(get_first_value_greater_than(target))
