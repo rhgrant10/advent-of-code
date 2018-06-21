@@ -10,6 +10,24 @@ class Node:
         self.children = []
 
 
+class Level:
+    def __init__(self, node, weights=None):
+        self.node = node
+        self.weights = weights or []
+
+
+class Stack(list):
+    @property
+    def top(self):
+        return self[-1]
+
+    def push(self, value):
+        return self.append(value)
+
+    def pop(self):
+        return super().pop(-1)
+
+
 def build_tree(name, weights, children):
     root = Node(name, weights[name])
     stack = [root]
@@ -22,52 +40,38 @@ def build_tree(name, weights, children):
     return root
 
 
-def print_tree(node, indent='  ', level=0):
-    print(f'{indent * level}{node.name} ({node.weight})')
-    for child in node.children:
-        print_tree(child, level=level + 1)
+def find_imbalance(root):
+    stack = Stack([Level(root)])
+    while stack:
+        if len(stack.top.weights) < len(stack.top.node.children):
+            # get next child weight if we haven't visited all children yet
+            i = len(stack.top.weights)
+            stack.append(Level(stack.top.node.children[i]))
+        else:
+            # we have visited all children; if there is a unique weight, find
+            # the difference from the common weight and return the unique
+            # child's adjusted weight
+            common, unique = get_common_and_unique(stack.top.weights)
+            if unique is not None:
+                diff = common - unique
+                index = stack.top.weights.index(unique)
+                return stack.top.node.children[index].weight + diff
+
+            # children are balanced, so sum weights and add to parent
+            total = stack.top.node.weight + sum(stack.top.weights)
+            stack.pop()
+            if not stack:
+                return None
+            stack.top.weights.append(total)
 
 
-def print_real_tree(node, indent='  ', level=0):
-    weight = node.weight
-    for child in node.children:
-        weight += print_real_tree(child, level=level + 1)
-    print(f'{indent * level}{node.name} ({weight})')
-    return weight
-
-
-def calculate_total_weight(node):
-    weights = []
-    for child in node.children:
-        weights.append(calculate_total_weight(child))
-    node.total_weight = node.weight + sum(weights)
-    return node.total_weight
-
-
-def find_imbalance(node):
-    for child in node.children:
-        imbalance = find_imbalance(child)
-        if imbalance:
-            return imbalance
-    for child in node.children:
-        weight = get_correct_weight(child, node.children)
-        if child.weight != weight:
-            return weight
-    return None
-
-
-def get_correct_weight(node, siblings):
-    weights = [s.total_weight for s in siblings]
-    weights.sort()
-    if weights[0] == weights[1]:
-        correct_weight = weights[0]
-    elif weights[-2] == weights[-1]:
-        correct_weight = weights[-1]
-    else:
-        raise Exception('wat')
-
-    diff = correct_weight - node.total_weight
-    return node.weight + diff
+def get_common_and_unique(weights):
+    if not weights:
+        return None, None
+    counts = collections.Counter(weights)
+    if len(counts) == 1:
+        return list(counts)[0], None
+    return [k for k, __ in counts.most_common()]
 
 
 def parse_data(filename):
@@ -105,7 +109,6 @@ def main(filename):
     root = find_root(children, parents)
 
     node = build_tree(root, weights, children)
-    calculate_total_weight(node)
     print(find_imbalance(node))
 
 
