@@ -2,13 +2,8 @@ import sys
 import functools
 import operator
 
-import colorama
-
 
 SUFFIX = [17, 31, 73, 47, 23]
-
-
-colorama.init(autoreset=True)
 
 
 def read_lengths(filename):
@@ -18,27 +13,15 @@ def read_lengths(filename):
     return content.strip() + bytes(SUFFIX)
 
 
-def print_colored_state(marks, index=0, length=0):
-    selected = set([i % len(marks) for i in range(index, index + length)])
-    for i, mark in enumerate(marks):
-        value = str(mark).rjust(3)
-        color = colorama.Fore.RED if i in selected else ''
-        print(f'{color} {value}', end='  ')
-        if (i + 1) % 16 == 0:
-            print()
-    print('\n')
-
-
 def build_hash(lengths, rounds=64):
     marks = list(range(256))
     index = 0
     skip = 0
     for _ in range(rounds):
         for length in lengths:
-            # print(f'skip = {skip}, index = {index}, length = {length}')
-            # print_colored_state(marks, index, length)
             twist(marks, index, length)
-            index = (index + length + skip) % len(marks)
+            index += length + skip
+            index %= len(marks)
             skip += 1
     return marks
 
