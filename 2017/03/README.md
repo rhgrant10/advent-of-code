@@ -1,7 +1,9 @@
 Spiral Memory
 =============
 
-We can do this in constant time. The strategy here is to calculate each axis of movement and sum them together.
+## Part 1
+
+We can do this in constant time<sup id="a1">[1](#f1)</sup>. The strategy here is to calculate each axis of movement and sum them together.
 
 The term "ring" is used below to represent a set of squares labeled from `N + 1` to `M`, where `N` and `M` are the numerical squares of consecutive odd numbers. For example, using consecutive odd numbers 5 and 7 we have N=25 and M=49 and which correspond to squares 26 though 49.
 
@@ -19,7 +21,7 @@ The first axis of movement is simple because it amounts to sequentially counting
 | 4     | 49    | 7     |
 | ...   | ...   | ...   |
 
-We then use the the linear relationship (n - 1) / 2 to number the rings starting at 0:
+We then use the the linear relationship `(n - 1) / 2` to number the rings starting at 0:
 
 | sqrt  | id    |
 | :---: | :---: |
@@ -39,4 +41,14 @@ The absolute value of the difference between the ring ID and the edge index is t
 
 ### Final Step
 
-Finally, the Manhattan distance is simple the sum of these two axis movements.
+Finally, the Manhattan distance is simply the sum of these two axis movements.
+
+<b id="f1">1</b> Technically it's linear in relation to the number of bits in the input number.[↩](#a1)
+
+## Part 2
+
+Ideally we would only need to track two rings: the current one being filled in and the one just inside it. However, the approach here is more naive.
+
+Store values by their coordinates, and as we move a "cursor" around in a square spiral we simple sum up all neighbors and fill in the current square.
+
+This is done in linear time.
