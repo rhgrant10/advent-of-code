@@ -15,8 +15,7 @@ def read_lengths(filename):
 
 def build_hash(lengths, rounds=64):
     marks = list(range(256))
-    index = 0
-    skip = 0
+    skip = index = 0
     for _ in range(rounds):
         for length in lengths:
             twist(marks, index, length)
@@ -40,20 +39,11 @@ def get_hex(dense_hash):
 
 
 def twist(marks, index, length):
-    # construct the list of marks to reverse
-    end = index + length
-    mod_end = end % len(marks)
-    segment = marks[index:end]
-    if mod_end != end:
-        segment += marks[:mod_end]
-
-    # reverse the list
-    segment = list(reversed(segment))
-
-    # put it back in the list of marks
-    for mark in segment:
-        marks[index] = mark
-        index = (index + 1) % len(marks)
+    stack = []
+    for i in range(length):
+        stack.append(marks[(index + i) % 256])
+    for i in range(length):
+        marks[(index + i) % 256] = stack.pop(-1)
 
 
 def main(filename, rounds=64):
