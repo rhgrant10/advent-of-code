@@ -1,6 +1,6 @@
 digraph G {
-    start
-    end
+    start [shape=circle,style=filled,fillcolor=black,fontcolor=white]
+    end [shape=doublecircle,style=filled,fillcolor=black,fontcolor=white]
     groupStart [label="Group"]
     groupEnd [label="Group end"]
     garbageStart [label="Garbage"]
@@ -13,9 +13,9 @@ digraph G {
 
     {groupStart next} -> garbageStart [label="<"]
     {garbageEnd groupEnd} -> next [label=","]
-    garbageStart -> ignore [label="!"]
+    garbageStart -> ignore [label="!   "]
     garbageStart -> garbageEnd [label=">"]
-    ignore -> garbageStart [label="."]
+    ignore -> garbageStart
 
     groupEnd -> end
 }
