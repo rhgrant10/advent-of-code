@@ -1,55 +1,13 @@
-r"""
-Use a 3d grid, like Q*bert :)
-
-     y
-
-     |
-     |
-    / \
-   /   \
-  /     \
-
-z         x
-
-   y
-    \  n   /
-  nw +----+ ne
-    /      \
-  -+        +- x
-    \      /
-  sw +----+ se
-    /  s   \
-   z
-
-   y
-    \ 0+-  /
--+0  +---+  +0-
-    /     \
----+       +--- x
-    \     /
--0+  +---+  +-0
-    / 0-+  \
-   z
-
-"""
 import sys
 
 
-N = 'n'
-S = 's'
-NE = 'ne'
-SW = 'sw'
-NW = 'nw'
-SE = 'se'
-
-
 DIRECTIONS = {
-    N  : ( 0,  1, -1),  # noqa
-    S  : ( 0, -1,  1),  # noqa
-    NE : ( 1,  0, -1),  # noqa
-    SW : (-1,  0,  1),  # noqa
-    NW : (-1,  1,  0),  # noqa
-    SE : ( 1, -1,  0),  # noqa
+    'n'  : ( 0,  1, -1),  # noqa
+    's'  : ( 0, -1,  1),  # noqa
+    'ne' : ( 1,  0, -1),  # noqa
+    'sw' : (-1,  0,  1),  # noqa
+    'nw' : (-1,  1,  0),  # noqa
+    'se' : ( 1, -1,  0),  # noqa
 }
 
 
