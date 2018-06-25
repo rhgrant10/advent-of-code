@@ -1,0 +1,42 @@
+Spiral Memory
+=============
+
+We can do this in constant time. The strategy here is to calculate each axis of movement and sum them together.
+
+The term "ring" is used below to represent a set of squares labeled from `N + 1` to `M`, where `N` and `M` are the numerical squares of consecutive odd numbers. For example, using consecutive odd numbers 5 and 7 we have N=25 and M=49 and which correspond to squares 26 though 49.
+
+Note that this approach does not work for the trivial case of square 1, so we handle that separately up front.
+
+### First Axis
+
+The first axis of movement is simple because it amounts to sequentially counting the rings. We first note that the maximum value in each ring is the square of an odd number:
+
+| ring  | max   | sqrt  |
+| :---: | :---: | :---: |
+| 1     | 1     | 1     |
+| 2     | 9     | 3     |
+| 3     | 25    | 5     |
+| 4     | 49    | 7     |
+| ...   | ...   | ...   |
+
+We then use the the linear relationship (n - 1) / 2 to number the rings starting at 0:
+
+| sqrt  | id    |
+| :---: | :---: |
+|  1    | 0     |
+|  3    | 1     |
+|  5    | 2     |
+|  7    | 3     |
+|  ...  | ...   |
+
+The resulting ring ID is the distance along one axis needed to reach any square on that ring.
+
+### Perpendicular Axis
+
+The perpendicular axis is a little more difficult. To find it we find the number of squares along each edge of the ring. Ring 3, for example, which contains squares 26 - 49, has 24 squares. Each of its 4 sides would have 6 squares numbered 0 to 5. This value is termed the edge index.
+
+The absolute value of the difference between the ring ID and the edge index is the remaining perpendicular distance to the target square.
+
+### Final Step
+
+Finally, the Manhattan distance is simple the sum of these two axis movements.

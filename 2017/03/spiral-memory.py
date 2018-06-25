@@ -12,7 +12,6 @@ PROBLEMS = {
 }
 
 
-# see sprial-memory.go for an explanation of the algorithm
 def calculate_spiral_manhattan(square):
     if square <= 0:
         raise ValueError('Invalid number, must be greater than 0')
