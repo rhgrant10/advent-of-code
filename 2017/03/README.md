@@ -3,7 +3,7 @@ Spiral Memory
 
 ## Part 1
 
-We can do this in constant time<sup id="a1">[1](#f1)</sup>. The strategy here is to calculate each axis of movement and sum them together.
+We can do this in constant time (technically it's linear in relation to the number of bits in the input number). The strategy here is to calculate each axis of movement and sum them together.
 
 The term "ring" is used below to represent a set of squares labeled from `N + 1` to `M`, where `N` and `M` are the numerical squares of consecutive odd numbers. For example, using consecutive odd numbers 5 and 7 we have N=25 and M=49 and which correspond to squares 26 though 49.
 
@@ -42,8 +42,6 @@ The absolute value of the difference between the ring ID and the edge index is t
 ### Final Step
 
 Finally, the Manhattan distance is simply the sum of these two axis movements.
-
-<b id="f1">1</b> Technically it's linear in relation to the number of bits in the input number.[↩](#a1)
 
 ## Part 2
 
