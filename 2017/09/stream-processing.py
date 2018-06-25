@@ -1,26 +1,3 @@
-"""
-digraph G {
-    start
-    end
-    groupStart [label="Group"]
-    groupEnd [label="Group end"]
-    garbageStart [label="Garbage"]
-    garbageEnd [label="Garbage end"]
-    next
-    ignore
-
-    {start groupStart} -> groupStart [label="{"]
-    {groupStart garbageEnd} -> groupEnd [label="}"]
-
-    {groupStart next} -> garbageStart [label="<"]
-    {garbageEnd groupEnd} -> next [label=","]
-    garbageStart -> ignore [label="!"]
-    garbageStart -> garbageEnd [label=">"]
-    ignore -> garbageStart [label="."]
-
-    groupEnd -> end
-}
-"""
 import sys
 
 
