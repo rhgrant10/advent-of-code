@@ -3,11 +3,13 @@ Spiral Memory
 
 ## Part 1
 
-We can do this in constant time (technically it's linear in relation to the number of bits in the input number). The strategy here is to calculate each axis of movement and sum them together.
+We can do this in constant time. The strategy here is to calculate each axis of movement and sum them together.
 
 The term "ring" is used below to represent a set of squares labeled from `N + 1` to `M`, where `N` and `M` are the numerical squares of consecutive odd numbers. For example, using consecutive odd numbers 5 and 7 we have N=25 and M=49 and which correspond to squares 26 though 49.
 
 Note that this approach does not work for the trivial case of square 1, so we handle that separately up front.
+
+Also note that technically, this algorithm is linear in relation to the number of bits in the input number. The `.*-big.{go,py}` versions support arbitrarily large input numbers and included in this directory is a file containing the first one million decimal digits of pi :)
 
 ### First Axis
 

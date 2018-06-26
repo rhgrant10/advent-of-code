@@ -1,21 +1,10 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import math
-
-
-PROBLEMS = {
-    1: 0,
-    12: 3,
-    23: 2,
-    1024: 31,
-    347991: -1,
-}
+import sys
 
 
 def calculate_spiral_manhattan(square):
-    if square <= 0:
-        raise ValueError('Invalid number, must be greater than 0')
-    elif square == 1:
+    if square == 1:
         return 0
 
     square_floor = int(math.sqrt(square - 1))
@@ -31,22 +20,10 @@ def calculate_spiral_manhattan(square):
     return int(distance)
 
 
-def main():
-    for square, answer in PROBLEMS.items():
-        print('square: ', square)
-
-        try:
-            distance = calculate_spiral_manhattan(square)
-        except ValueError as e:
-            print(e)
-
-        print('distance: ', distance)
-        if distance == answer:
-            print('Correct!')
-        elif answer is not None:
-            print('Incorrect :(')
-        print()
+def main(square):
+    distance = calculate_spiral_manhattan(square)
+    print(distance)
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1])

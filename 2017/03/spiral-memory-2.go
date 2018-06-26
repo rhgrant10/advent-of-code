@@ -65,9 +65,8 @@ func getFirstValueGreaterThan(target int) int {
 
 func main() {
     target, err := strconv.Atoi(os.Args[1])
-    if err != nil || target < 1 {
-        fmt.Print("That's not a positive integer... " + os.Args[1])
-    } else {
-        fmt.Print(getFirstValueGreaterThan(target))
+    if err != nil {
+        panic(err)
     }
+    fmt.Print(getFirstValueGreaterThan(target))
 }
