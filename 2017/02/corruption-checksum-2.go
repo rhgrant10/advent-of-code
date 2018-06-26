@@ -8,21 +8,28 @@ import "strings"
 import "strconv"
 
 
-func calculateChecksum(rows [][]int) (checksum int) {
+func calculateChecksum(rows [][]int) int {
+    checksum := 0
     for _, row := range rows {
-        min := row[0]
-        max := row[0]
-        for _, value := range row {
-            if value < min {
-                min = value
-            } else if value > max {
-                max = value
+        ThisRow:
+        for i := 0; i < len(row); i++ {
+            for j := i + 1; j < len(row); j++ {
+                large := row[i]
+                small := row[j]
+                if small > large {
+                    small = row[i]
+                    large = row[j]
+                }
+                if large % small == 0 {
+                    checksum += large / small
+                    break ThisRow
+                }
             }
         }
-        checksum += max - min
     }
-    return
+    return checksum
 }
+
 
 
 func readSpreadsheet(filename string) (spreadsheet [][]int) {
