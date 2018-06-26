@@ -8,26 +8,27 @@ import "strings"
 import "strconv"
 
 
-func calculateChecksum(rows [][]int) int {
-    checksum := 0
+func calculateChecksum(rows [][]int) (checksum int) {
     for _, row := range rows {
-        ThisRow:
-        for i := 0; i < len(row); i++ {
-            for j := i + 1; j < len(row); j++ {
-                large := row[i]
-                small := row[j]
-                if small > large {
-                    small = row[i]
-                    large = row[j]
-                }
-                if large % small == 0 {
-                    checksum += large / small
-                    break ThisRow
-                }
+        checksum += calculateRowValue(row)
+    }
+    return
+}
+
+
+func calculateRowValue(row []int) int {
+    for i := 0; i < len(row); i++ {
+        for j := i + 1; j < len(row); j++ {
+            small, large := row[i], row[j]
+            if small > large {
+                small, large = large, small
+            }
+            if large % small == 0 {
+                return large / small
             }
         }
     }
-    return checksum
+    return 0
 }
 
 
