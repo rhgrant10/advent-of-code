@@ -3,8 +3,9 @@ import sys
 
 
 def perform(sequence):
+    half = len(sequence) // 2
     total = 0
-    for a, b in zip(sequence, sequence[1:] + sequence[:1]):
+    for a, b in zip(sequence, sequence[half:] + sequence[:half]):
         if a == b:
             total += int(a)
     return total
