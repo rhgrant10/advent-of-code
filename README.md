@@ -11,7 +11,7 @@ Note that these solutions subscribe to the garbage in garbage out philosophy. My
 Solutions with Explanations
 ---------------------------
 
-- [Day 3](2017/03/README.md)
-- [Day 7](2017/07/README.md)
-- [Day 9](2017/09/README.md)
-- [Day 11](2017/11/README.md)
+- [Day 3](2017/03/)
+- [Day 7](2017/07/)
+- [Day 9](2017/09/)
+- [Day 11](2017/11/)
