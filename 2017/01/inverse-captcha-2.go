@@ -10,7 +10,7 @@ import "strings"
 
 func perform(captcha []int) (sum int) {
     var size = len(captcha)
-    var j = 1
+    var j = size / 2
     for i := 0; i < size; i++ {
         if captcha[i] == captcha[j % size] {
             sum += captcha[i]
