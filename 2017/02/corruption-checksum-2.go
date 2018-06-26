@@ -32,7 +32,6 @@ func calculateRowValue(row []int) int {
 }
 
 
-
 func readSpreadsheet(filename string) (spreadsheet [][]int) {
     fp, err := os.Open(filename)
     if err != nil {
