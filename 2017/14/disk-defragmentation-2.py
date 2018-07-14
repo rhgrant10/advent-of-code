@@ -2,10 +2,16 @@
 import sys
 import functools
 import operator
-import itertools
+import collections
 
 
 SUFFIX = [17, 31, 73, 47, 23]
+
+UP = 0, -1
+DOWN = 0, 1
+LEFT = -1, 0
+RIGHT = 1, 0
+NEIGHBORS = UP, DOWN, LEFT, RIGHT
 
 
 def build_hash(text, rounds=64):
@@ -46,12 +52,12 @@ def get_bin(dense_hash):
 
 
 def get_disk_state(key_string):
-    grid = []
-    for i in range(128):
-        row_key = f'{key_string}-{i}'
+    grid = collections.defaultdict(bool)
+    for y in range(128):
+        row_key = f'{key_string}-{y}'
         knot_hash = get_knot_hash(row_key)
-        row_state = get_row_state(knot_hash)
-        grid.append(row_state)
+        for x, bit in enumerate(get_bin(knot_hash)):
+            grid[x, y] = bit == '1'
     return grid
 
 
@@ -61,23 +67,12 @@ def get_knot_hash(text):
     return dense_hash
 
 
-def get_row_state(hash_):
-    binary = get_bin(hash_)
-    return [bit == '1' for bit in binary]
-
-
-def iter_squares(grid):
-    for y, row in enumerate(grid):
-        for x, square in enumerate(row):
-            yield (y, x), square
-
-
 def count_islands(grid):
     visited = set()
     count = 0
 
-    for coord, is_used in iter_squares(grid):
-        if coord in visited or not grid[coord[0]][coord[1]]:
+    for coord, is_used in grid.items():
+        if not is_used or coord in visited:
             continue
 
         count += 1
@@ -86,36 +81,27 @@ def count_islands(grid):
 
         while stack:
             coord = stack.pop(-1)
-            for y, x in get_connected_neighbors(coord):
-                coord = y, x
-                if coord not in visited and grid[y][x]:
-                        stack.append(coord)
-                visited.add(coord)
+            for neighbor in get_connected_neighbors(coord):
+                if neighbor not in visited and grid[neighbor]:
+                    stack.append(neighbor)
+                visited.add(neighbor)
 
     return count
 
 
 def get_connected_neighbors(coord):
-    neighborhood = get_neighborhood(coord)
-    connected = [
-        neighborhood[0][1],
-        neighborhood[1][0], neighborhood[1][2],
-        neighborhood[2][1],
-    ]
-    yield from [coord for coord in connected if is_inbounds(*coord)]
+    for offset in NEIGHBORS:
+        neighbor = move(coord, offset)
+        if is_inbounds(neighbor):
+            yield neighbor
 
 
-def get_neighborhood(coord):
-    neighborhood = []
-    y, x = coord
-    for ny in range(y - 1, y + 2):
-        street = [(ny, nx) for nx in range(x - 1, x + 2)]
-        neighborhood.append(street)
-    return neighborhood
+def move(coord, offset):
+    return tuple(sum(pairs) for pairs in zip(coord, offset))
 
 
-def is_inbounds(y, x, size=128):
-    return 0 <= x < size and 0 <= y < size
+def is_inbounds(coord, size=128):
+    return all(0 <= n < size for n in coord)
 
 
 def main(key_string):
