@@ -4,7 +4,6 @@ import argparse
 
 import aocd
 
-from . import exceptions
 from . import utils
 
 
@@ -16,6 +15,7 @@ def main(args=None):
     one_parser.add_argument('year', type=int)
     one_parser.add_argument('day', type=int)
     one_parser.add_argument('part', type=int)
+    one_parser.add_argument('-i', '--input', type=str, required=False)
     one_parser.set_defaults(func=run_one)
 
     all_parser = subparsers.add_parser('all')
@@ -25,14 +25,14 @@ def main(args=None):
     args.func(args)
 
 
-def get_answer(year, day, part):
+def get_answer(year, day, part, input_=None):
     problem = utils.get_part(utils.get_day(day), part)
-    input_ = aocd.get_data(year=year, day=day)
+    input_ = input_ or aocd.get_data(year=year, day=day)
     return problem(input_)
 
 
 def run_one(args):
-    answer = get_answer(args.year, args.day, args.part)
+    answer = get_answer(args.year, args.day, args.part, input_=args.input)
     print(answer)
 
 

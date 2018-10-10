@@ -56,7 +56,7 @@ def count_islands(grid):
             coord = stack.pop(-1)
             for neighbor in get_connected_neighbors(coord):
                 if neighbor not in visited and grid[neighbor]:
-                   stack.append(neighbor)
+                    stack.append(neighbor)
                 visited.add(neighbor)
 
     return count
