@@ -26,7 +26,7 @@ def main(args=None):
 
 
 def get_answer(year, day, part, input_=None):
-    problem = utils.get_part(utils.get_day(day), part)
+    problem = utils.get_problem(day, part)
     input_ = input_ or aocd.get_data(year=year, day=day)
     return problem(input_)
 

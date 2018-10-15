@@ -27,3 +27,7 @@ def get_part(day, part):
         return getattr(day, f'part_{part}')
     except AttributeError:
         raise exceptions.NoSuchException('part', part)
+
+
+def get_problem(day, part):
+    return get_part(get_day(day), part)
