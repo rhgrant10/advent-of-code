@@ -12,6 +12,7 @@ from . import scanner  # noqa
 from . import spiral  # noqa
 from . import stream  # noqa
 from . import trampolines  # noqa
+from . import dancing  # noqa
 
 
 BY_DAY_NUMBER = {
@@ -30,4 +31,5 @@ BY_DAY_NUMBER = {
     13: scanner,
     14: defragmentation,
     15: generators,
+    16: dancing,
 }
