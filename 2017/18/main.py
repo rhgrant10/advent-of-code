@@ -1,120 +1,164 @@
 # -*- coding: utf-8 -*-
+import queue
 import collections
-import string
+import itertools
 
 
 class RcvException(Exception):
     def __init__(self, registers):
-        super().__init__(registers)
         self.registers = registers
 
     def __str__(self):
-        return str(self.registers["hz"])
+        freq = self.registers['hz']
+        lineno = self.registers['ip']
+        return 'RcvException: hz={} on line {}'.format(freq, lineno)
 
 
-def opcode(symbol):
-    def wrapper(f):
-        setattr(f, 'symbol', symbol)
-        return f
-    return wrapper
-
-
-class Computer(type):
-    def __new__(cls, name, bases, dct):
-        klass = super().__new__(cls, name, bases, dct)
-        klass.instruction_set = {}
-        for value in dct.values():
-            if callable(value) and hasattr(value, 'symbol'):
-                symbol = getattr(value, 'symbol')
-                klass.instruction_set[symbol] = value
-        return klass
-
-
-class DuetMachine(metaclass=Computer):
-    registers = string.ascii_lowercase
-
-    def __init__(self):
-        self.instructions = []
-
-    def get_new_context(self, **kwargs):
-        names = set(self.registers) | {'hz'}
-        return Registers(names, **kwargs)
-
-    def read(self, ip):
-        return self.instructions[ip]
-
-    def decode(self, instruction):
-        opcode, *args = instruction.split()
-        func = self.instruction_set[opcode]
-        return func, args
-
-    @staticmethod
-    @opcode('snd')
-    def op_snd(regs, x):
-        regs['hz'] = regs.value_of(x)
-
-    @staticmethod
-    @opcode('set')
-    def op_set(regs, x, y):
-        regs[x] = regs.value_of(y)
-
-    @staticmethod
-    @opcode('add')
-    def op_add(regs, x, y):
-        regs[x] += regs.value_of(y)
-
-    @staticmethod
-    @opcode('mul')
-    def op_mul(regs, x, y):
-        regs[x] *= regs.value_of(y)
-
-    @staticmethod
-    @opcode('mod')
-    def op_mod(regs, x, y):
-        regs[x] %= regs.value_of(y)
-
-    @staticmethod
-    @opcode('rcv')
-    def op_rcv(regs, x):
-        if regs.value_of(x) != 0:
-            raise RcvException(regs)
-
-    @staticmethod
-    @opcode('jgz')
-    def op_jgz(regs, x, y):
-        if regs.value_of(x) > 0:
-            return regs.value_of(y)
+def instruction(symbol):
+    def _instruction(f):
+        def execute_instruction(*args, **kwargs):
+            result = f(*args, **kwargs)
+            return 1 if result is None else result
+        execute_instruction.symbol = symbol
+        return execute_instruction
+    return _instruction
 
 
 class Process:
-    def __init__(self, computer, input_, output, ip=0):
-        self.input = input_
-        self.output = output
-        self.regs = computer.get_new_context(ip=ip)
-        self.computer = computer
 
-    def execute(self, queue):
-        while True:
-            instruction = self.computer.read(self.regs['ip'])
-            func, args = self.computer.decode(instruction)
-            self.regs['ip'] += func(self.regs, *args) or 1
+    def __init__(self, instructions):
+        self.memory = instructions
+        self.registers = collections.defaultdict(int)
+        self.instruction_set = self.get_instruction_set()
 
+    @classmethod
+    def get_instruction_set(cls):
+        instructions = {}
+        for name in dir(cls):
+            attr, symbol = cls._get_symbol_info(name)
+            if symbol:
+                instructions[symbol] = attr
+        return instructions
 
-class Registers(collections.defaultdict):
-    standard_registers = ['ip']
+    @classmethod
+    def _get_symbol_info(cls, attrname):
+        attr = getattr(cls, attrname)
+        symbol = getattr(attr, 'symbol', None)
+        return attr, symbol
 
-    def __init__(self, registers, **kwargs):
-        super().__init__(int)
-        self.register_names = set(registers) | set(self.standard_registers)
-        self.update(kwargs)
+    @property
+    def ip(self):
+        return self.registers['ip']
 
-    def __getitem__(self, key):
-        if key not in self.register_names:
-            raise Exception('no such register {!r}'.format(key))
-        return super().__getitem__(key)
+    @ip.setter
+    def ip(self, value):
+        self.registers['ip'] = value
 
-    def value_of(self, x):
+    def tick(self):
+        if self.ip > len(self.memory):
+            raise StopIteration('')
+        instruction = self.memory[self.ip]
+        func, args = self.decode(instruction)
+        self.ip += func(self, *args)
+
+    def decode(self, instruction):
+        name, *args = instruction.split()
+        func = self.instruction_set[name]
+        return func, args
+
+    def get_value_of(self, arg):
         try:
-            return int(x)
+            return int(arg)
         except ValueError:
-            return self[x]
+            return self.registers[arg]
+
+    @instruction('set')
+    def _set(self, x, y):
+        self.registers[x] = self.get_value_of(y)
+
+    @instruction('add')
+    def _add(self, x, y):
+        self.registers[x] += self.get_value_of(y)
+
+    @instruction('mul')
+    def _mul(self, x, y):
+        self.registers[x] *= self.get_value_of(y)
+
+    @instruction('mod')
+    def _mod(self, x, y):
+        self.registers[x] %= self.get_value_of(y)
+
+    @instruction('jgz')
+    def _jgz(self, x, y):
+        if self.get_value_of(x) > 0:
+            return self.get_value_of(y)
+
+
+class Mark1(Process):
+    @instruction('snd')
+    def _snd(self, x):
+        self.registers['hz'] = self.get_value_of(x)
+
+    @instruction('rcv')
+    def _rcv(self, x):
+        raise RcvException(self.registers)
+
+
+class Mark2(Process):
+    _next_id = 0
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.registers['p'] = self._assign_id()
+        self.outq = queue.Queue()
+        self.inq = queue.Queue()
+        self.send_count = 0
+
+    @classmethod
+    def _assign_id(cls):
+        id_ = cls._next_id
+        cls._next_id += 1
+        return id_
+
+    @instruction('snd')
+    def _snd(self, x):
+        value = self.get_value_of(x)
+        self.outq.put(value)
+        self.send_count += 1
+
+    @instruction('rcv')
+    def _rcv(self, x):
+        try:
+            self.registers['x'] = self.inq.get_nowait()
+        except queue.Empty:
+            return 0
+
+
+class Processor:
+    def __init__(self, *processes):
+        self.processes = processes
+
+    def execute(self):
+        for p in itertools.cycle([self.processes]):
+            p.tick()
+
+
+def part_1(input_):
+    instructions = input_.split('\n')
+    process = Mark1(instructions)
+    processor = Processor(process)
+    try:
+        processor.execute()
+    except RcvException as e:
+        hz = e.registers['hz']
+        print(hz)
+
+
+def part_2(input_):
+    instructions = input_.split('\n')
+    p1 = Mark2(instructions)
+    p2 = Mark2(instructions)
+    p1.inq = p2.outq
+    p2.inq = p1.outq
+    processor = Processor(p1, p2)
+    processor.execute()

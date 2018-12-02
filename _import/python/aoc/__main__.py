@@ -26,7 +26,7 @@ def main(args=None):
 
 
 def get_answer(year, day, part, input_=None):
-    problem = utils.get_problem(day, part)
+    problem = utils.get_problem(year, day, part)
     input_ = input_ or aocd.get_data(year=year, day=day)
     return problem(input_)
 
@@ -37,14 +37,14 @@ def run_one(args):
 
 
 def run_all(args):
-    for year in range(2017, 2018):
-        for day in range(1, 25):
-            for part in (1, 2):
-                try:
-                    answer = get_answer(year, day, part)
-                except Exception as e:
-                    answer = f'Exception! {e}'
-                print(f'{year} day {day}, part {part}: {answer}')
+    print('Problem  \tAnswer')
+    for year, day, part, problem in sorted(utils.find_problems()):
+        print(f'{year} {day:>2}.{part}', end='\t', flush=True)
+        try:
+            input_ = aocd.get_data(year=year, day=day)
+            print(problem(input_))
+        except (KeyboardInterrupt, Exception) as e:
+            print(e)
 
 
 if __name__ == '__main__':

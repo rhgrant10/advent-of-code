@@ -50,8 +50,8 @@ def judge(a, b, num_pairs, num_bits=NUM_BITS):
     for p, a, b in zip(completion, a, b):
         if have_equal_lsbs(a, b, num_bits):
             count += 1
-        print('{:.1f}% {}'.format(p, count), end='\r')
-    print()
+    #     print('{:.1f}% {}'.format(p, count), end='\r')
+    # print()
     return count
 
 

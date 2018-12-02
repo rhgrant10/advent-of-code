@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import collections
 
-from . import hash
+from . import y2017_d10
 
 
 UP = 0, -1
@@ -22,8 +22,8 @@ def get_disk_state(key_string):
 
 
 def get_knot_hash(text):
-    sparse_hash = hash.build_hash(text)
-    dense_hash = hash.reduce_hash(sparse_hash)
+    sparse_hash = y2017_d10.build_hash(text)
+    dense_hash = y2017_d10.reduce_hash(sparse_hash)
     return dense_hash
 
 

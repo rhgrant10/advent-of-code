@@ -15,19 +15,33 @@ class Stack(list):
         return super().pop(-1)
 
 
-def get_day(number):
+def _get_day(year, number):
     try:
-        return problems.BY_DAY_NUMBER[number]
+        return problems.PROBLEMS[year][number]
     except KeyError:
-        raise exceptions.NoSuchException('day', number)
+        raise exceptions.NoSuchException('day', (year, number))
 
 
-def get_part(day, part):
+def _get_part(day, part):
     try:
         return getattr(day, f'part_{part}')
     except AttributeError:
         raise exceptions.NoSuchException('part', part)
 
 
-def get_problem(day, part):
-    return get_part(get_day(day), part)
+def get_problem(year, number, part):
+    day = _get_day(year, number)
+    return _get_part(day, part)
+
+
+def find_problems(years=None, days=None, parts=None):
+    matching_years = set(years) if years else set(problems.PROBLEMS)
+    for year in matching_years:
+        matching_days = set(days) if days else set(problems.PROBLEMS[year])
+        for day in matching_days:
+            problem = problems.PROBLEMS[year][day]
+            for part in parts or (1, 2):
+                try:
+                    yield year, day, part, _get_part(problem, part)
+                except exceptions.NoSuchException:
+                    pass
