@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from . import y2015_d01  # noqa
 from . import y2015_d02  # noqa
+from . import y2015_d03  # noqa
 from . import y2017_d01  # noqa
 from . import y2017_d03  # noqa
 from . import y2017_d04  # noqa
@@ -25,6 +26,7 @@ PROBLEMS = {
     2015: {
         1: y2015_d01,
         2: y2015_d02,
+        3: y2015_d03,
     },
     2017: {
         1: y2017_d01,
