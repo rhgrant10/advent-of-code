@@ -24,6 +24,7 @@ from . import y2018_d03  # noqa
 from . import y2018_d04  # noqa
 from . import y2018_d05  # noqa
 from . import y2018_d06  # noqa
+from . import y2018_d07  # noqa
 
 
 PROBLEMS = {
@@ -57,5 +58,6 @@ PROBLEMS = {
         4: y2018_d04,
         5: y2018_d05,
         6: y2018_d06,
+        7: y2018_d07,
     },
 }
