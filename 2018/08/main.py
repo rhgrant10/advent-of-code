@@ -50,8 +50,23 @@ def get_metadata(node):
         yield from get_metadata(child)
 
 
+def get_value(node):
+    if not node.children:
+        return sum(node.metadata)
+    children = [i - 1 for i in node.metadata if i <= len(node.children)]
+    values = [get_value(node.children[i]) for i in children]
+    return sum(values)
+
+
 def part_1(input_):
     numbers = [int(n) for n in input_.strip().split()]
     tree, = create_tree(numbers)
     metadata = get_metadata(tree)
     return sum(itertools.chain(*metadata))
+
+
+def part_2(input_):
+    numbers = [int(n) for n in input_.strip().split()]
+    tree, = create_tree(numbers)
+    value = get_value(tree)
+    return value
