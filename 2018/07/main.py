@@ -124,7 +124,7 @@ def pace(seconds, rate=1, fps=30):
     real_duration = seconds / rate
     deadline = now + real_duration
     frames = math.ceil(real_duration * fps)
-    deadlines = [deadline - i * (real_duration / frames) for i in range(frames)]
+    deadlines = [deadline - i * (real_duration / frames) for i in range(frames)]  # noqa
 
     delta = seconds / frames
     for deadline in reversed(deadlines):
