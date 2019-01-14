@@ -32,3 +32,9 @@ def part_1(input_):
     num_players, points = parse_input(input_)
     score = get_score(num_players, limit=points)
     return score
+
+
+def part_2(input_):
+    num_players, points = parse_input(input_)
+    score = get_score(num_players, limit=points * 100)
+    return score
