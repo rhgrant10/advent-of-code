@@ -15,6 +15,7 @@ setuptools.setup(
 
     install_requires=[
         'advent-of-code-data==0.4.2',
+        'colored==1.3.93',
     ],
 
     entry_points={
