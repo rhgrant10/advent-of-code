@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 
 
 def perform(sequence, get_ahead):
@@ -24,3 +25,14 @@ def part_1(input_):
 
 def part_2(input_):
     return perform(input_, get_ahead=by_half)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

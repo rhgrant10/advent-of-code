@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import collections
 import functools
+import sys
 
 
 @functools.total_ordering
@@ -108,3 +109,15 @@ def part_3(input_):
 
     _, (minute, gid) = max((v, k) for k, v in chances.items())
     return gid * minute
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+    print('part 3:', part_3(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

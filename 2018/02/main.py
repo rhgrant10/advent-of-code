@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import collections
+import sys
 
 
 def contains(x):
@@ -34,3 +35,14 @@ def part_2(input_):
     for a, b in pairwise(box_ids):
         if get_hamming_distance(a, b) == 1:
             return ''.join(a for a, b in zip(a, b) if a == b)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

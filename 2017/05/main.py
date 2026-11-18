@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 
 
 def escape(maze, get_adjustment):
@@ -35,3 +36,14 @@ def part_1(input_):
 def part_2(input_):
     maze = read_maze(input_)
     return count_escape_steps(maze, conditionally_increase)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

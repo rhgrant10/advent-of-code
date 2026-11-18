@@ -1,7 +1,10 @@
-package defragmentation
+package main
 
-import "github.com/rhgrant10/advent-of-code_go/pkg/problems/2017/hash"
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strings"
+)
 
 const NUM_KNOTS = 256
 const NUM_KEYS = 128
@@ -79,10 +82,52 @@ func getDiskState(keyString string) map[Coord]bool {
 }
 
 func getKnotHash(text string) []byte {
-	var lengths = append([]byte(text), hash.SUFFIX...)
-	var sparseHash = hash.BuildSparseHash(lengths, NUM_ROUNDS)
-	var denseHash = hash.ReduceHash(sparseHash)
+	var lengths = append([]byte(text), SUFFIX...)
+	var sparseHash = buildSparseHash(lengths, NUM_ROUNDS)
+	var denseHash = reduceHash(sparseHash)
 	return denseHash
+}
+
+// Knot hash, copied from 2017/10.
+
+func buildSparseHash(lengths []byte, numRounds int) SparseHash {
+	var marks SparseHash
+	for i := 0; i < NUM_KNOTS; i++ {
+		marks[i] = byte(i)
+	}
+	var index byte
+	var skip int
+	for r := 0; r < numRounds; r++ {
+		for _, length := range lengths {
+			twist(&marks, index, length)
+			index += byte(int(length) + skip)
+			skip++
+		}
+	}
+	return marks
+}
+
+func twist(marks *SparseHash, index byte, length byte) {
+	var segment ByteStack
+	var i byte
+	for i = 0; i < length; i++ {
+		segment.Push(marks[index+i])
+	}
+	for i = 0; i < length; i++ {
+		marks[index+i] = segment.Pop()
+	}
+}
+
+func reduceHash(sparseHash SparseHash) (denseHash []byte) {
+	var value byte
+	for i := 0; i < NUM_KNOTS; i++ {
+		value ^= sparseHash[i]
+		if (i+1)%16 == 0 {
+			denseHash = append(denseHash, value)
+			value = 0
+		}
+	}
+	return
 }
 
 func getBits(knotHash []byte) (bits string) {
@@ -154,4 +199,14 @@ func Part1(input string) interface{} {
 func Part2(input string) interface{} {
 	var grid = getDiskState(input)
 	return countIslands(grid)
+}
+
+func main() {
+	data, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	input := strings.TrimSpace(string(data))
+	fmt.Println("part 1:", Part1(input))
+	fmt.Println("part 2:", Part2(input))
 }

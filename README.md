@@ -6,11 +6,3 @@ My solutions to Advent of Code. Mostly this is a project for me to have fun lear
 The files are organized into directories by date. If my approach to solving the problem warrants some explanation, and I felt up to it, I've included a readme in that directory.
 
 Note that these solutions typically subscribe to the garbage-in garbage-out philosophy. My rationale is that these are pedagogical solutions to interesting problems, and not production-safe paragons of proper error checking.
-
-Solutions with Explanations
----------------------------
-
-- [2017 Day 3](2017/03/)
-- [2017 Day 7](2017/07/)
-- [2017 Day 9](2017/09/)
-- [2017 Day 11](2017/11/)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import string
+import sys
 
 
 MOVES = {}
@@ -69,3 +70,14 @@ def part_2(input_):
             r = max_trials % trial
             trial = max_trials - r
     return ''.join(programs)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

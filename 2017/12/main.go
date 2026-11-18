@@ -1,7 +1,11 @@
-package plumber
+package main
 
-import "strings"
-import "strconv"
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
 // Graph type
 type Graph map[int][]int
@@ -124,4 +128,14 @@ func Part2(input string) interface{} {
 	var graph = readGraph(input)
 	var numGroups = countProgramGroups(graph)
 	return numGroups
+}
+
+func main() {
+	data, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	input := strings.TrimSpace(string(data))
+	fmt.Println("part 1:", Part1(input))
+	fmt.Println("part 2:", Part2(input))
 }

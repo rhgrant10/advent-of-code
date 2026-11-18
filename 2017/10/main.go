@@ -1,7 +1,8 @@
-package hash
+package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -104,4 +105,14 @@ func Part2(input string) interface{} {
 	var sparseHash = BuildSparseHash(data, 64)
 	var denseHash = ReduceHash(sparseHash)
 	return toHexString(denseHash)
+}
+
+func main() {
+	data, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	input := strings.TrimSpace(string(data))
+	fmt.Println("part 1:", Part1(input))
+	fmt.Println("part 2:", Part2(input))
 }

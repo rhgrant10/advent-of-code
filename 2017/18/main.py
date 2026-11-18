@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import queue
 import collections
 import itertools
+import queue
+import sys
 
 
 class RcvException(Exception):
@@ -162,3 +163,14 @@ def part_2(input_):
     p2.inq = p1.outq
     processor = Processor(p1, p2)
     processor.execute()
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

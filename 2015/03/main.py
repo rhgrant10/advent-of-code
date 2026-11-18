@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import collections
 import itertools
+import sys
 
 
 CENTER = 0, 0
@@ -42,3 +43,14 @@ def part_2(input_):
     directions = parse_directions(input_)
     visited = deliver(directions, santas=2)
     return len(visited)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

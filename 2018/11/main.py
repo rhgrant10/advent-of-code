@@ -1,3 +1,4 @@
+import sys
 
 
 def calculate_fuel_grid(serial_no, size):
@@ -80,3 +81,14 @@ def part_2(input_):
     grid = calculate_fuel_grid(serial_number, size=300)
     (x, y), w = find_max_window(grid)
     return f'{x + 1},{y + 1},{w}'
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

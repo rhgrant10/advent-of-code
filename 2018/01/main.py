@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 
 
 def part_1(input_):
@@ -16,3 +17,14 @@ def part_2(input_):
                 return freq
             seen.add(freq)
             freq += c
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

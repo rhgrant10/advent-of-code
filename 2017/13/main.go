@@ -1,7 +1,11 @@
-package scanner
+package main
 
-import "strings"
-import "strconv"
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
 func toInt(s string) int {
 	i, err := strconv.Atoi(strings.TrimSpace(s))
@@ -61,4 +65,14 @@ func Part1(input string) interface{} {
 func Part2(input string) interface{} {
 	var firewall = readFirewall(input)
 	return getDelay(firewall)
+}
+
+func main() {
+	data, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	input := strings.TrimSpace(string(data))
+	fmt.Println("part 1:", Part1(input))
+	fmt.Println("part 2:", Part2(input))
 }

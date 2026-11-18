@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 
 
 def read_input_file(input_):
@@ -42,3 +43,14 @@ def part_2(input_):
     stream = read_input_file(input_)
     __, garbage_count = parse(stream)
     return garbage_count
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 
 
 def parse_dimensions(input_):
@@ -25,3 +26,14 @@ def part_1(input_):
 def part_2(input_):
     dimensions_list = parse_dimensions(input_)
     return sum(length_required(d) for d in dimensions_list)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

@@ -1,4 +1,10 @@
-package stream
+package main
+
+import (
+	"fmt"
+	"os"
+	"strings"
+)
 
 func parseStream(stream string) (score int, garbage int) {
 	var depth = 0
@@ -39,4 +45,14 @@ func Part1(input string) interface{} {
 func Part2(input string) interface{} {
 	var _, garbage = parseStream(input)
 	return garbage
+}
+
+func main() {
+	data, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	input := strings.TrimSpace(string(data))
+	fmt.Println("part 1:", Part1(input))
+	fmt.Println("part 2:", Part2(input))
 }

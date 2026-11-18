@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import sys
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 
@@ -66,3 +67,13 @@ def part_1(input_):
     animation = create_animation(lights, start_frame=0, interval=2000)
     print(animation)
     plt.show()
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

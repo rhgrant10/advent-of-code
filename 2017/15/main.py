@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 
 
 LIMIT = 2147483647
@@ -79,3 +80,14 @@ def part_2(input_):
     gen_a = Generator(start_a, FACTOR_A, create_multiple_filter(MULTIPLE_A))
     gen_b = Generator(start_b, FACTOR_B, create_multiple_filter(MULTIPLE_B))
     return judge(gen_a, gen_b, num_pairs=int(5e6))
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

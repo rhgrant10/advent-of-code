@@ -1,7 +1,46 @@
 # -*- coding: utf-8 -*-
 import collections
+import functools
+import operator
+import sys
 
-from . import y2017_d10
+
+# Knot hash, copied from 2017/10.
+
+NUM_ROUNDS = 64
+NUM_MARKS = 256
+SUFFIX = [17, 31, 73, 47, 23]
+
+
+def build_hash(data, rounds=NUM_ROUNDS, append_suffix=True):
+    marks = list(range(NUM_MARKS))
+    skip = index = 0
+    if append_suffix:
+        data = data.encode('utf-8') + bytes(SUFFIX)
+    for _ in range(rounds):
+        for length in data:
+            twist(marks, index, length)
+            index += length + skip
+            index %= len(marks)
+            skip += 1
+    return marks
+
+
+def twist(marks, index, length):
+    stack = []
+    for i in range(length):
+        stack.append(marks[(index + i) % 256])
+    for i in range(length):
+        marks[(index + i) % 256] = stack.pop(-1)
+
+
+def reduce_hash(sparse_hash):
+    dense_hash = []
+    for b in range(0, 256, 16):
+        block = sparse_hash[b:b + 16]
+        compressed_block = functools.reduce(operator.xor, block)
+        dense_hash.append(compressed_block)
+    return dense_hash
 
 
 UP = 0, -1
@@ -22,8 +61,8 @@ def get_disk_state(key_string):
 
 
 def get_knot_hash(text):
-    sparse_hash = y2017_d10.build_hash(text)
-    dense_hash = y2017_d10.reduce_hash(sparse_hash)
+    sparse_hash = build_hash(text)
+    dense_hash = reduce_hash(sparse_hash)
     return dense_hash
 
 
@@ -85,3 +124,14 @@ def part_1(input_):
 def part_2(input_):
     grid = get_disk_state(input_)
     return count_islands(grid)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

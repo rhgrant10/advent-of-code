@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import collections
+import sys
 from decimal import Decimal
 
 
@@ -76,3 +77,14 @@ def part_1(input_):
 def part_2(input_):
     target = int(input_)
     return get_first_value_greater_than(target)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

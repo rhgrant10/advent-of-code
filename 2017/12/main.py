@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import collections
+import sys
 
 
 def parse_graph(input_):
@@ -53,3 +54,14 @@ def part_1(input_):
 def part_2(input_):
     graph = parse_graph(input_)
     return count_groups(graph)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

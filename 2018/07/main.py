@@ -2,6 +2,7 @@
 import collections
 import heapq
 import math
+import sys
 import time
 
 import colored
@@ -188,3 +189,14 @@ def part_2(input_):
     requirements = parse_instructions(input_)
     duration = time_traversal(requirements, workers=5)
     return duration
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

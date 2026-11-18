@@ -1,6 +1,8 @@
-package trampolines
+package main
 
 import (
+	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -51,4 +53,14 @@ func Part1(input string) interface{} {
 func Part2(input string) interface{} {
 	maze := createMaze(input)
 	return countEscapeSteps(maze, conditionalIncrementer)
+}
+
+func main() {
+	data, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	input := strings.TrimSpace(string(data))
+	fmt.Println("part 1:", Part1(input))
+	fmt.Println("part 2:", Part2(input))
 }

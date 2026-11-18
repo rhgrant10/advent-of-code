@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import itertools
+import sys
 
 
 def parse_input(text):
@@ -38,3 +39,14 @@ def part_2(input_):
     num_players, points = parse_input(input_)
     score = get_score(num_players, limit=points * 100)
     return score
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

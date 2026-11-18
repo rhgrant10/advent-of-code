@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import functools
 import operator
+import sys
 
 
 NUM_ROUNDS = 64
@@ -62,3 +63,14 @@ def part_2(input_):
     sparse_hash = build_hash(data, rounds=NUM_ROUNDS)
     dense_hash = reduce_hash(sparse_hash)
     return get_hex(dense_hash)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])

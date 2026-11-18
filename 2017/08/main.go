@@ -1,7 +1,11 @@
-package registers
+package main
 
-import "strconv"
-import "strings"
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
 type RegisterSet map[string]int
 
@@ -118,4 +122,14 @@ func Part2(input string) interface{} {
 	var instructions = parseInput(input)
 	var registers = make(RegisterSet)
 	return execute2(instructions, registers)
+}
+
+func main() {
+	data, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	input := strings.TrimSpace(string(data))
+	fmt.Println("part 1:", Part1(input))
+	fmt.Println("part 2:", Part2(input))
 }

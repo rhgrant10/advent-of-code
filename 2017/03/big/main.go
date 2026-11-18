@@ -1,5 +1,3 @@
-//go:build ignore
-
 // big-spiral-memory
 package main
 

@@ -1,6 +1,8 @@
-package checksum
+package main
 
 import (
+	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -67,4 +69,14 @@ func Part1(input string) interface{} {
 func Part2(input string) interface{} {
 	var spreadsheet = readSpreadsheet(input)
 	return calculateChecksum(spreadsheet, getMultipleOfEvenlyDivisible)
+}
+
+func main() {
+	data, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	input := strings.TrimSpace(string(data))
+	fmt.Println("part 1:", Part1(input))
+	fmt.Println("part 2:", Part2(input))
 }

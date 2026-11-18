@@ -1,7 +1,18 @@
 # -*- coding: utf-8 -*-
 import collections
+import sys
 
-from .. import utils
+
+class Stack(list):
+    @property
+    def top(self):
+        return self[-1]
+
+    def push(self, value):
+        return self.append(value)
+
+    def pop(self):
+        return super().pop(-1)
 
 
 class Node:
@@ -60,7 +71,7 @@ def build_tree(name, weights, children):
 
 
 def find_imbalance(root):
-    stack = utils.Stack([Level(root)])
+    stack = Stack([Level(root)])
     while stack:
         if len(stack.top.weights) < len(stack.top.node.children):
             # get next child weight if we haven't visited all children yet
@@ -103,3 +114,14 @@ def part_2(input_):
     root = find_root(children, parents)
     tree = build_tree(root, weights, children)
     return find_imbalance(tree)
+
+
+def main(filename):
+    with open(filename) as f:
+        input_ = f.read().strip()
+    print('part 1:', part_1(input_))
+    print('part 2:', part_2(input_))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1])
