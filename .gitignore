@@ -1,2 +1,9 @@
-data/*
-build/*
+# Puzzle inputs
+input.txt
+
+# Rust
+/target/
+
+# Python
+__pycache__/
+.venv/

@@ -1,3 +1,5 @@
+//go:build ignore
+
 // inverse-captcha
 package main
 

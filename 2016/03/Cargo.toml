@@ -1,0 +1,8 @@
+[package]
+name = "aoc-2016-03"
+edition = "2024"
+
+[dependencies]
+
+[dev-dependencies]
+rstest = "0.26.1"

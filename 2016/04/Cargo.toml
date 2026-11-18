@@ -1,0 +1,9 @@
+[package]
+name = "aoc-2016-04"
+edition = "2024"
+
+[dependencies]
+regex = "1.12.2"
+
+[dev-dependencies]
+rstest = "0.26.1"
